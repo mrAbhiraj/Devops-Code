@@ -1,0 +1,236 @@
+sudo apt-get update &&  sudo apt install docker.io -y
+
+
+Docker + Jenkin as a Continer 
+
+vi Dockerfile
+
+from jenkins/jenkins:lts-jdk11
+USER root
+RUN apt-get update -qq \
+ && apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository \
+ "deb [arch=amd64] https://download.docker.com/linux/debian \
+ $(lsb_release -cs) \
+ stable"
+RUN apt-get update -qq \
+ && apt-get install docker.io -y
+RUN usermod -aG docker jenkins
+
+
+docker image build -t jenkins-docker .
+
+docker container run -d -p 8080:8080 -v   /var/run/docker.sock:/var/run/docker.sock jenkins-docker
+
+docker exec -it 7ae9922fcbd9 bin/bash
+
+     cat /var/jenkins_home/secrets/initialAdminPassword
+	 
+	 
+Punit Singh 8:42
+A Jenkinsfile is basically a text file where you define all the steps that Jenkins should follow to build, test, and deploy your project.
+
+Amit Kabade 8:43
+A Jenkinsfile is a text file that contains the instructions (or "pipeline") for how Jenkins should build, test, and deploy your project.
+
+Add maven 
+
+maven-3.5.2 i added as a Tol in jenkin's (automatically) 
+
+Plugin , 
+Install maven  in jenkins server apt instlall maven
+
+
+Go to your Jenkins dashboard.
+
+Click Manage Jenkins → Manage Plugins.
+
+Search for Docker Pipeline.
+
+Install it (no need to restart Jenkins usually).
+
+
+CD with pipeline (Jenkins)
+docker pull vickeyyvickey/myapplication
+
+Whatsapp in android mobile phone 
+
+playstore 
+servch whatsapp 1  now whats2 
+install 
+
+whatsapp 1  now whats2 
+Upddate - 
+remove the prevouse  and install the new 
+
+----------------
+
+Scripted of Declerative Pipeline 
+
+node {
+   def dockerImageTag = "devopsexample${env.BUILD_NUMBER}"
+    stage('Deploy deploy command')
+{
+        sh "docker images"
+        sh "docker rm -f devopsexample "
+        sh "docker run --name devopsexample -d -p 2222:2222 vickeyyvickey/myapplication:latest"
+        //-Completion
+        echo "--------------------------------------------------------"
+        echo "View App deployed here: http://server-ip:2222"
+        echo "--------------------------------------------------------"
+    }
+}
+
+
+CI / CD 
+
+
+------------
+
+node {
+    // reference to maven
+    // ** NOTE: This 'maven-3.5.2' Maven tool must be configured in the Jenkins Global Configuration.   
+    def mvnHome = tool 'maven-3.5.2'
+
+    // holds reference to docker image
+    def dockerImage
+    // ip address of the docker private repository(nexus)
+ 
+    def dockerImageTag = "devopsexample${env.BUILD_NUMBER}"
+-------------
+
+
+    stage('Clone Repo') { // for display purposes
+      // Get some code from a GitHub repository
+      git 'https://github.com/vikas4cloud/DevOps-Example.git'
+      // Get the Maven tool.
+      // ** NOTE: This 'maven-3.5.2' Maven tool must be configured
+      // **       in the global configuration.           
+      mvnHome = tool 'maven-3.5.2'
+    }    
+  
+    stage('Build Project') {
+      // build project via maven
+      sh "'${mvnHome}/bin/mvn' clean install"
+    }
+		
+    stage('Build Docker Image') {
+      // build docker image
+      dockerImage = docker.build("devopsexample:${env.BUILD_NUMBER}")
+    }
+   	  
+    stage('Deploy Docker Image and login'){
+      
+      echo "Docker Image Tag Name: ${dockerImageTag}"
+	  
+        sh "docker images"
+        sh "docker login -u vickeyyvickey -p Hello@123" // put PWD
+	
+}
+    stage('Docker push'){
+       // docker images | awk '{print $3}' | awk 'NR==2'
+	// sh "docker images | awk '{print $3}' | awk 'NR==2'"
+	//sh echo "Enter the docker lattest imageID"
+	//sh "read imageid"
+	   sh "docker tag 1fc3eedeee6f  vickeyyvickey/myapplication" //must change your name and tag no
+        sh "docker push   vickeyyvickey/myapplication"
+  }
+}
+
+
+triggers { pollSCM '* * * * *' }
+
+Pan india 
+
+Infosys   2+ 
+any profile 
+Docker, Kubernete's Engineer's 
+Project-2
+
+Direct email :-
+
+Q&A 
+Vault 3rd Application 
+ID=1111
+pwd==111
+Token 15min 
+K8s secret's 
+How to store credential's in realtime ?
+
+
+
+withVault(credentials: [[path: 'secret/myapp', secretValues: [[envVar: 'MY_PASSWORD', vaultKey: 'password']]]]) {
+    sh "echo My password is $MY_PASSWORD"
+}
+ 
+ 
+ how to give domain name instead of IP address ?  
+purchase Dpomain 
+ route 53 , godaddy 
+ 
+ IP=name 
+ A record's  
+ 
+ ----------
+ 
+ how to auto generate  your pipeline code according to your requirement
+ 
+ 
+
+how to create POM.xml if developer not given or might be in case its incorrect
+
+
+3 qus
+
+If we re run the ci pipeline then do we need to change the image id if not why and in real world do we follow the same practice 
+
+For dev prod deployment- what else changes is required apart from parameterized like we have 5 server in dev and 5 in qa how to make it done
+
+
+We mentioned root@1.1.1.1 how to setup - ssh-keygen process
+
+-----------
+
+Amit Kabade 10:07
+if we wants to declarative pipeline for CD then it should be separate jenkinfile or we can right cd code in same jenkinfile
+
+jenkinfileci for CI
+jenkinfilecd for CD 
+
+
+
+-------
+
+3 qus
+
+If we re run the ci pipeline then do we need to change the image id if not why and in real world do we follow the same practice 
+
+
+if u want to push all images tag  
+
+For dev prod deployment- what else changes is required apart from parameterized like we have 5 server in dev and 5 in qa how to make it done
+
+
+ - KEygen
+ 
+Dev ? IP's 
+QA- IP 
+
+
+We mentioned root@1.1.1.1 how to setup - ssh-keygen process
+
+Jenkinsfile 
+& Docker DevOps 
+
+--------
+
+bhupesh deora 10:13
+how we can apply devops methodology in mobile development like react native (npn build) and flutter 
+
+google Store  - Deply for UI 
+
+Rakesh Mane 10:14
+can we roleback the reliable version as well like K8s
+
+How to rolleback ?
